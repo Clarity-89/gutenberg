@@ -19,6 +19,7 @@ import {
 	Toolbar,
 	ToggleControl,
 	ToolbarButton,
+	KeyboardShortcuts,
 } from '@wordpress/components';
 import {
 	LEFT,
@@ -27,6 +28,7 @@ import {
 	DOWN,
 	BACKSPACE,
 	ENTER,
+	rawShortcut,
 } from '@wordpress/keycodes';
 import { __ } from '@wordpress/i18n';
 import {
@@ -66,6 +68,10 @@ function NavigationMenuItemEdit( {
 			setWasCloseByLinkControl( false );
 		};
 	}, [ isSelected ] );
+
+	const openLinkUI = () => {
+		setIsLinkOpen( true );
+	};
 
 	/**
 	 * `onKeyDown` LinkControl handler.
@@ -193,13 +199,20 @@ function NavigationMenuItemEdit( {
 					'is-selected': isSelected,
 				} ) }
 			>
-				<RichText
-					className="wp-block-navigation-menu-item__content"
-					value={ label }
-					onChange={ ( labelValue ) => setAttributes( { label: labelValue } ) }
-					placeholder={ __( 'Add item…' ) }
-					withoutInteractiveFormatting
-				/>
+				<KeyboardShortcuts
+					shortcuts={ {
+						[ rawShortcut.primary( 'k' ) ]: openLinkUI(),
+					} }
+				>
+					<RichText
+						className="wp-block-navigation-menu-item__content"
+						value={ label }
+						onChange={ ( labelValue ) => setAttributes( { label: labelValue } ) }
+						placeholder={ __( 'Add item…' ) }
+						withoutInteractiveFormatting
+					/>
+				</KeyboardShortcuts>
+
 				{ isLinkOpen &&
 					<LinkControl
 						className="wp-block-navigation-menu-item__inline-link-input"
